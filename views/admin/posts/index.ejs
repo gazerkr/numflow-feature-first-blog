@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post Management</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <%- include('../../partials/theme-script') %>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+  <!-- Navigation -->
+  <nav class="bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center space-x-8">
+          <a href="/admin" class="text-white hover:text-indigo-300 transition font-medium">Dashboard</a>
+          <a href="/admin/posts" class="text-white hover:text-indigo-300 transition font-medium border-b-2 border-indigo-400 pb-1">Posts</a>
+          <a href="/admin/categories" class="text-white hover:text-indigo-300 transition font-medium">Categories</a>
+          <a href="/admin/tags" class="text-white hover:text-indigo-300 transition font-medium">Tags</a>
+          <a href="/admin/settings" class="text-white hover:text-indigo-300 transition font-medium">Settings</a>
+          <a href="/blog" class="text-white hover:text-indigo-300 transition font-medium">View Blog</a>
+        </div>
+        <div class="flex items-center space-x-4">
+          <span class="text-white text-sm"><%= currentUser.displayName %></span>
+          <form method="POST" action="/auth/logout" class="inline">
+            <button type="submit" class="text-white hover:text-red-300 transition font-medium">
+              Logout
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-8">
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Post Management</h1>
+        <a href="/admin/posts/new" class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-indigo-600 hover:to-purple-700 transform hover:-translate-y-0.5 transition-all shadow-md hover:shadow-lg">
+          New Post
+        </a>
+      </div>
+
+      <% if (posts.length === 0) { %>
+        <!-- Empty State -->
+        <div class="text-center py-16">
+          <svg class="mx-auto h-16 w-16 text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          <p class="text-xl text-gray-600 dark:text-gray-300 mb-6">No posts yet</p>
+          <a href="/admin/posts/new" class="inline-block bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-indigo-600 hover:to-purple-700 transform hover:-translate-y-0.5 transition-all shadow-md hover:shadow-lg">
+            Create First Post
+          </a>
+        </div>
+      <% } else { %>
+        <!-- Posts Table -->
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
+            <thead class="bg-gray-50 dark:bg-gray-900">
+              <tr>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Title</th>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Category</th>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Author</th>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Created</th>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white dark:bg-gray-700 divide-y divide-gray-200 dark:divide-gray-600">
+              <% posts.forEach(post => { %>
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-600 transition">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm font-medium text-gray-900 dark:text-white"><%= post.title %></div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-600 dark:text-gray-300"><%= post.category ? post.category.name : '-' %></div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-600 dark:text-gray-300"><%= post.author.displayName %></div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <% if (post.published) { %>
+                      <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300">
+                        Published
+                      </span>
+                    <% } else { %>
+                      <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-300">
+                        Draft
+                      </span>
+                    <% } %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">
+                    <%= new Date(post.createdAt).toLocaleDateString('en-US') %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    <div class="flex items-center space-x-2">
+                      <a href="/admin/posts/<%= post.id %>/edit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition font-medium">
+                        Edit
+                      </a>
+                      <form method="POST" action="/admin/posts/<%= post.id %>?_method=DELETE" class="inline">
+                        <button type="submit" onclick="return confirm('Are you sure you want to delete this?')" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition font-medium">
+                          Delete
+                        </button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

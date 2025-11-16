@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Category</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <%- include('../../partials/theme-script') %>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center p-5">
+  <div class="bg-white dark:bg-gray-700 rounded-2xl shadow-2xl p-10 w-full max-w-lg">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">Create Category</h1>
+
+    <% if (error) { %>
+      <div class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-400 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg mb-6">
+        <%= error %>
+      </div>
+    <% } %>
+
+    <form method="POST" action="/admin/categories" class="space-y-5">
+      <div>
+        <label for="name" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          Category Name <span class="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value="<%= formData.name || '' %>"
+          required
+          placeholder="e.g. Technology"
+          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+        >
+      </div>
+
+      <div>
+        <label for="slug" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Slug</label>
+        <input
+          type="text"
+          id="slug"
+          name="slug"
+          value="<%= formData.slug || '' %>"
+          placeholder="e.g. tech (leave blank to auto-generate)"
+          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+        >
+        <p class="text-xs text-gray-500 dark:text-gray-300 mt-2">
+          Unique identifier to be used in URLs. Use only lowercase letters, numbers, and hyphens (-).
+        </p>
+      </div>
+
+      <div>
+        <label for="description" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Description</label>
+        <textarea
+          id="description"
+          name="description"
+          placeholder="Enter category description"
+          rows="4"
+          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+        ><%= formData.description || '' %></textarea>
+      </div>
+
+      <div>
+        <label for="order" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Order</label>
+        <input
+          type="number"
+          id="order"
+          name="order"
+          value="<%= formData.order || 0 %>"
+          min="0"
+          placeholder="0"
+          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+        >
+      </div>
+
+      <div class="flex items-center space-x-3 pt-4">
+        <button
+          type="submit"
+          class="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-indigo-600 hover:to-purple-700 transform hover:-translate-y-0.5 transition-all shadow-md hover:shadow-lg"
+        >
+          Create
+        </button>
+        <a
+          href="/admin/categories"
+          class="flex-1 bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-600 transition text-center"
+        >
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

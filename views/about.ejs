@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - Numflow Blog</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <%- include('partials/theme-script') %>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+  <%- include('partials/nav', { currentUser: currentUser }) %>
+
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="bg-white dark:bg-gray-700 rounded-2xl shadow-2xl p-12">
+      <h1 class="text-5xl font-bold text-gray-900 dark:text-white mb-6 pb-4 border-b-2 border-indigo-200 dark:border-gray-600"><%= title %></h1>
+      <p class="text-xl text-gray-600 dark:text-gray-300 mb-12 leading-relaxed"><%= description %></p>
+
+      <div class="mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Key Features</h2>
+        <ul class="space-y-4">
+          <% if (features) { %>
+            <% features.forEach(feature => { %>
+              <li class="flex items-start">
+                <svg class="h-6 w-6 text-indigo-500 dark:text-indigo-400 mr-3 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                </svg>
+                <span class="text-lg text-gray-700 dark:text-gray-300"><%= feature %></span>
+              </li>
+            <% }) %>
+          <% } else { %>
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-indigo-500 dark:text-indigo-400 mr-3 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+              </svg>
+              <span class="text-lg text-gray-700 dark:text-gray-300">100% API compatible with Express 5.x</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-indigo-500 dark:text-indigo-400 mr-3 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+              </svg>
+              <span class="text-lg text-gray-700 dark:text-gray-300">Approximately 3x faster performance than Express</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-indigo-500 dark:text-indigo-400 mr-3 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+              </svg>
+              <span class="text-lg text-gray-700 dark:text-gray-300">Feature-First Architecture</span>
+            </li>
+          <% } %>
+        </ul>
+      </div>
+
+      <div class="mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Tech Stack</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <% if (techStacks && techStacks.length > 0) { %>
+            <% techStacks.forEach(tech => { %>
+              <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-600 dark:to-gray-700 rounded-xl p-6 border-l-4 border-indigo-500 dark:border-indigo-400 hover:shadow-lg transition">
+                <strong class="block text-sm text-gray-600 dark:text-gray-300 uppercase mb-2"><%= tech.category %></strong>
+                <p class="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mb-1"><%= tech.name %></p>
+                <% if (tech.version) { %>
+                  <p class="text-sm text-gray-500 dark:text-gray-300 mb-2">v<%= tech.version %></p>
+                <% } %>
+                <% if (tech.description) { %>
+                  <p class="text-sm text-gray-700 dark:text-gray-300"><%= tech.description %></p>
+                <% } %>
+              </div>
+            <% }) %>
+          <% } %>
+
+          <div class="bg-gradient-to-br from-green-50 to-emerald-100 dark:from-gray-600 dark:to-gray-700 rounded-xl p-6 border-l-4 border-green-500 dark:border-green-400 hover:shadow-lg transition">
+            <strong class="block text-sm text-gray-600 dark:text-gray-300 uppercase mb-2">Environment</strong>
+            <p class="text-2xl font-bold text-green-600 dark:text-green-400 mb-1"><%= nodeEnv %></p>
+            <p class="text-sm text-gray-500 dark:text-gray-300">Port <%= port %></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-gradient-to-br from-emerald-50 to-green-50 dark:from-gray-600 dark:to-gray-700 rounded-xl p-8 border-l-4 border-green-500 dark:border-green-400 mb-8">
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Why Numflow?</h3>
+        <p class="text-gray-700 dark:text-gray-300 mb-3">Numflow is a framework that maintains all Express features while significantly improving performance. Easy to migrate existing Express projects and provides faster response times.</p>
+        <p class="text-gray-700 dark:text-gray-300"><strong class="text-green-700 dark:text-green-400">Feature-First Architecture</strong> enables automatic execution of complex business logic through folder structure alone.</p>
+      </div>
+
+      <div class="bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-gray-600 dark:to-gray-700 rounded-xl p-8 border-l-4 border-amber-500 dark:border-amber-400">
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">This page was implemented with Feature-First</h3>
+        <p class="text-gray-700 dark:text-gray-300 mb-3">
+          <code class="bg-white dark:bg-gray-900 dark:text-gray-200 px-3 py-1 rounded border border-amber-200 dark:border-gray-600">features/about/@get/steps/</code> automatically created through folder structure.
+        </p>
+        <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+          <li>• <code class="bg-white dark:bg-gray-900 dark:text-gray-200 px-2 py-0.5 rounded text-sm">100-prepare-data.js</code> - Prepare data</li>
+          <li>• <code class="bg-white dark:bg-gray-900 dark:text-gray-200 px-2 py-0.5 rounded text-sm">200-render.js</code> - Page render</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-center py-8 text-gray-500 dark:text-gray-400">
+    <p>&copy; 2025 Numflow Blog - Powered by Numflow & EJS</p>
+  </footer>
+</body>
+</html>

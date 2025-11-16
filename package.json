@@ -1,0 +1,66 @@
+{
+  "name": "sqlite-feature-blog",
+  "version": "1.0.0",
+  "description": "Numflow와 EJS를 사용한 블로그",
+  "main": "app.js",
+  "type": "module",
+  "imports": {
+    "#lib/*": "./lib/*"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "dev": "npm run css:watch & node --watch app.js",
+    "css:build": "npx tailwindcss -i ./src/css/input.css -o ./public/css/styles.css --minify",
+    "css:watch": "npx tailwindcss -i ./src/css/input.css -o ./public/css/styles.css --watch",
+    "db:seed": "node prisma/seed.js",
+    "db:migrate": "npx prisma migrate dev",
+    "db:studio": "npx prisma studio",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
+  "keywords": [
+    "numflow",
+    "ejs",
+    "blog",
+    "feature-first"
+  ],
+  "author": "gazerkr",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gazerkr/numflow-feature-first-blog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gazerkr/numflow-feature-first-blog/issues"
+  },
+  "homepage": "https://github.com/gazerkr/numflow-feature-first-blog#readme",
+  "dependencies": {
+    "@prisma/client": "^6.19.0",
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.4.1",
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express-session": "^1.18.2",
+    "marked": "^17.0.0",
+    "method-override": "^3.0.0",
+    "multer": "^2.0.2",
+    "numflow": "^0.2.7",
+    "prisma": "^6.19.0",
+    "sanitize-html": "^2.17.0",
+    "transliteration": "^2.3.5"
+  },
+  "devDependencies": {
+    "@vitest/ui": "^4.0.8",
+    "autoprefixer": "^10.4.22",
+    "happy-dom": "^20.0.10",
+    "postcss": "^8.5.6",
+    "supertest": "^7.1.4",
+    "tailwindcss": "^3.4.17",
+    "vitest": "^4.0.8"
+  }
+}

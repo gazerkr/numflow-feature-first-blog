@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - Numflow Blog</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <%- include('../partials/theme-script') %>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+  <%- include('../partials/nav', { currentUser: currentUser }) %>
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <article class="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-8 md:p-12">
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6"><%= post.title %></h1>
+
+      <div class="flex flex-wrap items-center gap-4 mb-8 pb-6 border-b-2 border-gray-200 dark:border-gray-600 text-sm text-gray-600 dark:text-gray-300">
+        <% if (post.category) { %>
+          <a href="/blog/category/<%= post.category.slug %>" class="inline-flex px-4 py-2 rounded-full bg-indigo-100 text-indigo-700 font-semibold hover:bg-indigo-200 transition">
+            <%= post.category.name %>
+          </a>
+        <% } %>
+        <% if (post.author) { %>
+          <span class="font-medium">by <%= post.author.displayName %></span>
+        <% } %>
+        <% if (post.publishedAt) { %>
+          <span><%= new Date(post.publishedAt).toLocaleDateString('en-US') %></span>
+        <% } %>
+      </div>
+
+      <div class="prose prose-lg max-w-none mb-8">
+        <%- post.contentHtml %>
+      </div>
+
+      <% if (post.tags && post.tags.length > 0) { %>
+        <div class="pt-6 border-t border-gray-200 dark:border-gray-600">
+          <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Tags</h3>
+          <div class="flex flex-wrap gap-2">
+            <% post.tags.forEach(postTag => { %>
+              <a href="/blog/tag/<%= postTag.tag.slug %>" class="inline-flex px-3 py-1 text-sm rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                <%= postTag.tag.name %>
+              </a>
+            <% }) %>
+          </div>
+        </div>
+      <% } %>
+    </article>
+
+    <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-8 mt-8">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Comments</h2>
+
+      <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-6 mb-8">
+        <form id="commentForm">
+          <div class="space-y-4">
+            <div>
+              <label for="authorName" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Name <span class="text-red-500">*</span></label>
+              <input type="text" id="authorName" name="authorName" required class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+            </div>
+            <div>
+              <label for="authorEmail" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Email (optional)</label>
+              <input type="email" id="authorEmail" name="authorEmail" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+            </div>
+            <div>
+              <label for="content" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Comment <span class="text-red-500">*</span></label>
+              <textarea id="content" name="content" required rows="4" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"></textarea>
+            </div>
+            <button type="submit" class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-indigo-600 hover:to-purple-700 transition shadow-md">
+              Post Comment
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="space-y-4">
+        <% if (comments.length === 0) { %>
+          <div class="text-center py-12 bg-gray-50 dark:bg-gray-900 rounded-lg">
+            <p class="text-gray-600 dark:text-gray-300">Be the first to comment</p>
+          </div>
+        <% } else { %>
+          <% comments.forEach(comment => { %>
+            <div class="border border-gray-200 dark:border-gray-600 rounded-lg p-6 hover:shadow-md transition">
+              <div class="flex justify-between items-start mb-3 pb-3 border-b border-gray-100 dark:border-gray-600">
+                <span class="font-semibold text-gray-900 dark:text-white"><%= comment.authorName %></span>
+                <span class="text-sm text-gray-500 dark:text-gray-300"><%= new Date(comment.createdAt).toLocaleDateString('en-US') %></span>
+              </div>
+              <p class="text-gray-700 dark:text-gray-300 leading-relaxed"><%= comment.content %></p>
+            </div>
+          <% }) %>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-center py-8 text-gray-500 dark:text-gray-400 mt-8">
+    <p>&copy; 2025 Numflow Blog - Powered by Numflow, EJS & Prisma</p>
+  </footer>
+
+  <script>
+    document.getElementById('commentForm').addEventListener('submit', async (e) => {
+      e.preventDefault()
+
+      const formData = {
+        authorName: document.getElementById('authorName').value,
+        authorEmail: document.getElementById('authorEmail').value,
+        content: document.getElementById('content').value
+      }
+
+      try {
+        const response = await fetch('/api/posts/<%= post.slug %>/comments', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        })
+
+        const result = await response.json()
+
+        if (result.success) {
+          window.location.reload()
+        } else {
+          alert('Failed to post comment: ' + (result.error || 'Unknown error'))
+        }
+      } catch (error) {
+        alert('An error occurred while posting comment')
+        console.error(error)
+      }
+    })
+  </script>
+</body>
+</html>

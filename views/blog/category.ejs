@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - Numflow Blog</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <%- include('../partials/theme-script') %>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+  <%- include('../partials/nav', { currentUser: currentUser }) %>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-8">
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2"><%= category.name %></h1>
+      <% if (category.description) { %>
+        <p class="text-gray-600 dark:text-gray-300 mb-8"><%= category.description %></p>
+      <% } %>
+
+      <div class="mb-8 pb-6 border-b border-gray-200 dark:border-gray-600">
+        <form method="GET" action="/blog/search" class="flex gap-3">
+          <input
+            type="text"
+            name="q"
+            placeholder="Enter search term..."
+            class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition placeholder-gray-400 dark:placeholder-gray-500"
+          >
+          <button
+            type="submit"
+            class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-indigo-600 hover:to-purple-700 transition shadow-md"
+          >
+            Search
+          </button>
+        </form>
+      </div>
+
+      <% if (posts.length === 0) { %>
+        <div class="text-center py-16">
+          <svg class="mx-auto h-16 w-16 text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          <p class="text-xl text-gray-600 dark:text-gray-400">No posts yet</p>
+        </div>
+      <% } else { %>
+        <div class="grid gap-6">
+          <% posts.forEach(post => { %>
+            <div class="p-6 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-lg transition-shadow">
+              <h2 class="text-2xl font-bold mb-2">
+                <a href="/blog/<%= post.slug %>" class="text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 no-underline transition">
+                  <%= post.title %>
+                </a>
+              </h2>
+              <div class="flex gap-4 text-sm text-gray-600 dark:text-gray-300">
+                <% if (post.category) { %>
+                  <span class="text-indigo-600 dark:text-indigo-400 font-medium">
+                    <a href="/blog/category/<%= post.category.slug %>" class="no-underline hover:underline">
+                      <%= post.category.name %>
+                    </a>
+                  </span>
+                <% } %>
+                <% if (post.author) { %>
+                  <span>by <%= post.author.displayName %></span>
+                <% } %>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+
+        <% if (pagination.totalPages > 1) { %>
+          <div class="flex justify-center items-center gap-2 mt-8 pt-8 border-t border-gray-200 dark:border-gray-600">
+            <% if (pagination.hasPrev) { %>
+              <a href="/blog/category/<%= category.slug %>?page=<%= pagination.page - 1 %>" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition text-gray-900 dark:text-white no-underline">&laquo; Previous</a>
+            <% } else { %>
+              <span class="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-400 dark:text-gray-600 cursor-not-allowed">&laquo; Previous</span>
+            <% } %>
+
+            <% for (let i = 1; i <= pagination.totalPages; i++) { %>
+              <% if (i === pagination.page) { %>
+                <span class="current"><%= i %></span>
+              <% } else { %>
+                <a href="/blog/category/<%= category.slug %>?page=<%= i %>" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition text-gray-900 dark:text-white no-underline"><%= i %></a>
+              <% } %>
+            <% } %>
+
+            <% if (pagination.hasNext) { %>
+              <a href="/blog/category/<%= category.slug %>?page=<%= pagination.page + 1 %>" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition text-gray-900 dark:text-white no-underline">Next &raquo;</a>
+            <% } else { %>
+              <span class="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-400 dark:text-gray-600 cursor-not-allowed">Next &raquo;</span>
+            <% } %>
+          </div>
+        <% } %>
+      <% } %>
+    </div>
+  </div>
+
+  <footer class="text-center py-8 text-gray-500 dark:text-gray-400 mt-8">
+    <p>&copy; 2025 Numflow Blog - Powered by Numflow, EJS & Prisma</p>
+  </footer>
+</body>
+</html>

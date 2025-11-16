@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Post</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 32px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #dee2e6;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+      font-family: inherit;
+    }
+
+    textarea {
+      min-height: 300px;
+      resize: vertical;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .checkbox-group {
+      margin-bottom: 15px;
+    }
+
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      font-weight: normal;
+      cursor: pointer;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: auto;
+      margin-right: 8px;
+    }
+
+    .tag-checkboxes {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 6px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #667eea;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background 0.3s;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn:hover {
+      background: #5568d3;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      margin-left: 10px;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      border: 1px solid #f5c6cb;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .hint {
+      font-size: 14px;
+      color: #6c757d;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Edit Post</h1>
+
+    <% if (error) { %>
+      <div class="error"><%= error %></div>
+    <% } %>
+
+    <form method="POST" action="/admin/posts/<%= post.id %>?_method=PUT">
+      <div class="form-group">
+        <label for="title">제목 *</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value="<%= post.title %>"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="content">내용 (Markdown) *</label>
+        <textarea
+          id="content"
+          name="content"
+          required
+        ><%= post.content %></textarea>
+        <div class="hint">You can use Markdown syntax.</div>
+      </div>
+
+      <div class="form-group">
+        <label>Upload Image</label>
+        <input
+          type="file"
+          id="imageFile"
+          accept="image/*"
+          style="display: none;"
+        >
+        <button
+          type="button"
+          id="imageUploadBtn"
+          class="btn btn-secondary"
+          style="margin: 0;"
+        >
+          이미지 선택
+        </button>
+        <span id="uploadStatus" style="margin-left: 10px; color: #6c757d;"></span>
+        <div class="hint">Uploaded images are automatically inserted in Markdown format.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="categoryId">Categories</label>
+        <select id="categoryId" name="categoryId">
+          <option value="">None</option>
+          <% categories.forEach(category => { %>
+            <option
+              value="<%= category.id %>"
+              <%= post.categoryId === category.id ? 'selected' : '' %>
+            >
+              <%= category.name %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Tags</label>
+        <div class="tag-checkboxes">
+          <% if (tags.length === 0) { %>
+            <div class="hint">No tags available.</div>
+          <% } else { %>
+            <% tags.forEach(tag => { %>
+              <div class="checkbox-group">
+                <label>
+                  <input
+                    type="checkbox"
+                    name="tagIds"
+                    value="<%= tag.id %>"
+                    <%= selectedTagIds.includes(tag.id) ? 'checked' : '' %>
+                  >
+                  <%= tag.name %>
+                </label>
+              </div>
+            <% }) %>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="checkbox-group">
+          <label>
+            <input
+              type="checkbox"
+              name="published"
+              value="true"
+              <%= post.published ? 'checked' : '' %>
+            >
+            공개
+          </label>
+        </div>
+        <div class="hint">체크하지 않으면 초안으로 저장됩니다.</div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn">수정 완료</button>
+        <a href="/admin/posts" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // 이미지 업로드 기능
+    const imageUploadBtn = document.getElementById('imageUploadBtn')
+    const imageFile = document.getElementById('imageFile')
+    const contentTextarea = document.getElementById('content')
+    const uploadStatus = document.getElementById('uploadStatus')
+
+    // 버튼 클릭 시 파일 선택 창 열기
+    imageUploadBtn.addEventListener('click', () => {
+      imageFile.click()
+    })
+
+    // 파일 선택 시 업로드
+    imageFile.addEventListener('change', async (e) => {
+      const file = e.target.files[0]
+      if (!file) return
+
+      // 업로드 중 표시
+      uploadStatus.textContent = '업로드 중...'
+      uploadStatus.style.color = '#667eea'
+
+      try {
+        // FormData 생성
+        const formData = new FormData()
+        formData.append('image', file)
+
+        // 이미지 업로드 API 호출
+        const response = await fetch('/api/upload/image', {
+          method: 'POST',
+          body: formData
+        })
+
+        const result = await response.json()
+
+        if (result.success) {
+          // 마크다운 형식으로 textarea에 삽입
+          const imageMarkdown = `![${file.name}](${result.url})`
+          const cursorPos = contentTextarea.selectionStart
+          const textBefore = contentTextarea.value.substring(0, cursorPos)
+          const textAfter = contentTextarea.value.substring(cursorPos)
+
+          contentTextarea.value = textBefore + imageMarkdown + textAfter
+          contentTextarea.selectionStart = cursorPos + imageMarkdown.length
+          contentTextarea.selectionEnd = cursorPos + imageMarkdown.length
+          contentTextarea.focus()
+
+          // 성공 메시지
+          uploadStatus.textContent = '✓ 업로드 완료'
+          uploadStatus.style.color = '#28a745'
+
+          // 3초 후 메시지 제거
+          setTimeout(() => {
+            uploadStatus.textContent = ''
+          }, 3000)
+        } else {
+          throw new Error(result.error || '업로드 실패')
+        }
+      } catch (error) {
+        uploadStatus.textContent = `✗ 업로드 실패: ${error.message}`
+        uploadStatus.style.color = '#dc3545'
+      }
+
+      // 파일 입력 초기화
+      imageFile.value = ''
+    })
+  </script>
+</body>
+</html>

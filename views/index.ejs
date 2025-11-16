@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - Numflow Blog</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <%- include('partials/theme-script') %>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-900">
+  <%- include('partials/nav', { currentUser: currentUser }) %>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="bg-white dark:bg-gray-700 rounded-2xl shadow-2xl p-12">
+      <h1 class="text-5xl font-bold text-gray-900 dark:text-white mb-4"><%= title %></h1>
+      <p class="text-xl text-gray-600 dark:text-gray-300 mb-12"><%= message %></p>
+
+      <div class="grid md:grid-cols-2 gap-8 mb-12">
+        <div class="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-600 dark:to-gray-700 rounded-xl p-8 border border-indigo-100 dark:border-gray-600">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Numflow Features</h2>
+          <ul class="space-y-3">
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-green-500 dark:text-green-400 mr-3 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+              </svg>
+              <span class="dark:text-gray-200">100% API compatible with Express 5.x</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-green-500 dark:text-green-400 mr-3 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+              </svg>
+              <span class="dark:text-gray-200">Approximately 3x faster performance than Express</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-green-500 dark:text-green-400 mr-3 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+              </svg>
+              <span class="dark:text-gray-200">Feature-First Architecture</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-green-500 dark:text-green-400 mr-3 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+              </svg>
+              <span class="dark:text-gray-200">Use existing Express code as-is</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-gray-600 dark:to-gray-700 rounded-xl p-8 border border-green-100 dark:border-gray-600">
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Getting Started</h3>
+          <p class="text-gray-700 dark:text-gray-300 mb-3">This site is built using Numflow and EJS.</p>
+          <p class="text-gray-700 dark:text-gray-300">Running on port <span class="font-semibold text-indigo-600 dark:text-indigo-400"><%= port %></span>.</p>
+        </div>
+      </div>
+
+      <% if (posts && posts.length > 0) { %>
+      <div class="mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Recent Posts</h2>
+        <div class="grid gap-4">
+          <% posts.forEach(post => { %>
+            <div class="bg-white dark:bg-gray-600 rounded-lg border-l-4 border-indigo-500 dark:border-indigo-400 p-6 shadow-md hover:shadow-xl transition">
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2"><%= post.title %></h3>
+              <% if (post.excerpt) { %>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-3"><%= post.excerpt %></p>
+              <% } %>
+              <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-300">
+                <span><%= new Date(post.createdAt).toLocaleDateString('en-US') %></span>
+                <span class="text-indigo-600 dark:text-indigo-400 font-medium hover:text-indigo-800 dark:hover:text-indigo-300 cursor-pointer">Read more &rarr;</span>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+      <% } %>
+
+      <div class="bg-gradient-to-br from-emerald-50 to-green-50 dark:from-gray-600 dark:to-gray-700 rounded-xl p-8 border-l-4 border-green-500 dark:border-green-400">
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Powered by Prisma + SQLite</h3>
+        <p class="text-gray-700 dark:text-gray-300">All content is stored in a SQLite database and managed through Prisma ORM. Uses UUID for IDs for security.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-center py-8 text-gray-600 dark:text-gray-400">
+    <p>&copy; 2025 Numflow Blog - Powered by Numflow, EJS & Prisma</p>
+  </footer>
+</body>
+</html>

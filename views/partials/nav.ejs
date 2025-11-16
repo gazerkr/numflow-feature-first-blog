@@ -1,0 +1,46 @@
+<nav class="bg-gradient-to-r from-primary-600 to-primary-700 dark:from-gray-800 dark:to-gray-900 shadow-lg transition-colors">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center space-x-8">
+        <a href="/" class="text-white font-bold text-xl hover:text-primary-100 dark:hover:text-gray-300 transition-colors">
+          Numflow Blog
+        </a>
+        <div class="hidden md:flex space-x-4">
+          <a href="/" class="text-white hover:bg-primary-500 dark:hover:bg-gray-700 hover:bg-opacity-75 px-3 py-2 rounded-md text-sm font-medium transition-all">
+            Home
+          </a>
+          <a href="/blog" class="text-white hover:bg-primary-500 dark:hover:bg-gray-700 hover:bg-opacity-75 px-3 py-2 rounded-md text-sm font-medium transition-all">
+            Blog
+          </a>
+          <a href="/about" class="text-white hover:bg-primary-500 dark:hover:bg-gray-700 hover:bg-opacity-75 px-3 py-2 rounded-md text-sm font-medium transition-all">
+            About
+          </a>
+          <% if (currentUser) { %>
+            <a href="/admin" class="text-white hover:bg-primary-500 dark:hover:bg-gray-700 hover:bg-opacity-75 px-3 py-2 rounded-md text-sm font-medium transition-all">
+              Dashboard
+            </a>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <%- include('theme-toggle') %>
+
+        <% if (currentUser) { %>
+          <span class="hidden sm:block text-white text-sm font-medium">
+            <%= currentUser.displayName %>
+          </span>
+          <form method="POST" action="/auth/logout" class="inline-block">
+            <button type="submit" class="bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-all shadow-md hover:shadow-lg">
+              Logout
+            </button>
+          </form>
+        <% } else { %>
+          <a href="/auth/login" class="bg-white text-primary-600 hover:bg-primary-50 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 px-4 py-2 rounded-md text-sm font-medium transition-all shadow-md hover:shadow-lg">
+            Login
+          </a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</nav>

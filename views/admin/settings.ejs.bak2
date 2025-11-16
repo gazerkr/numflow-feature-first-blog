@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>설정 - Numflow Blog</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f5f5f5;
+    }
+
+    nav {
+      background-color: #2c3e50;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #3498db;
+    }
+
+    .user-info {
+      margin-left: auto;
+      color: white;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    .content {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #e1e4e8;
+    }
+
+    .errors {
+      background: #fee;
+      border: 1px solid #fcc;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+
+    .errors ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .errors li {
+      color: #c00;
+    }
+
+    .success {
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      color: #155724;
+    }
+
+    .form-section {
+      margin-bottom: 2.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #e1e4e8;
+    }
+
+    .form-section:last-child {
+      border-bottom: none;
+    }
+
+    .form-section h2 {
+      color: #2c3e50;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #e1e4e8;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+
+    .help-text {
+      font-size: 0.875rem;
+      color: #6c757d;
+      margin-top: 0.25rem;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    button {
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button[type="submit"] {
+      background-color: #3498db;
+      color: white;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #2980b9;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      color: #3498db;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #7f8c8d;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="/admin">Dashboard</a></li>
+      <li><a href="/admin/posts">Posts</a></li>
+      <li><a href="/admin/categories">Categories</a></li>
+      <li><a href="/admin/tags">Tags</a></li>
+      <li><a href="/admin/settings">Settings</a></li>
+      <li><a href="/blog">View Blog</a></li>
+      <li>
+        <form method="POST" action="/auth/logout" style="display: inline; margin: 0;">
+          <button type="submit" style="background: none; border: none; color: white; cursor: pointer; font: inherit; font-weight: 500; padding: 0;">
+            로그아웃
+          </button>
+        </form>
+      </li>
+      <li class="user-info"><%= currentUser.displayName %>(/li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <div class="content">
+      <a href="/admin" class="back-link">&larr; 대시보드로</a>
+
+      <h1>Settings</h1>
+
+      <% if (errors.length > 0) { %>
+        <div class="errors">
+          <ul>
+            <% errors.forEach(error => { %>
+              <li><%= error %></li>
+            <% }) %>
+          </ul>
+        </div>
+      <% } %>
+
+      <% if (successMessage) { %>
+        <div class="success"><%= successMessage %></div>
+      <% } %>
+
+      <form method="POST" action="/admin/settings">
+        <div class="form-section">
+          <h2>블로그 정보</h2>
+
+          <div class="form-group">
+            <label for="blogName">블로그 이름 *</label>
+            <input type="text" id="blogName" name="blogName"
+                   value="<%= settings.blogName %>" required>
+          </div>
+
+          <div class="form-group">
+            <label for="blogDescription">블로그 설명</label>
+            <textarea id="blogDescription" name="blogDescription"><%= settings.blogDescription %></textarea>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2>사용자 프로필</h2>
+
+          <div class="form-group">
+            <label for="displayName">표시 이름 *</label>
+            <input type="text" id="displayName" name="displayName"
+                   value="<%= currentUser.displayName %>" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email">이메일 *</label>
+            <input type="email" id="email" name="email"
+                   value="<%= currentUser.email %>" required>
+          </div>
+
+          <div class="form-group">
+            <label>사용자명</label>
+            <input type="text" value="<%= currentUser.username %>" disabled>
+            <div class="help-text">사용자명은 변경할 수 없습니다</div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2>비밀번호 변경</h2>
+          <div class="help-text" style="margin-bottom: 1rem;">비밀번호를 변경하지 않으려면 이 섹션을 비워두세요</div>
+
+          <div class="form-group">
+            <label for="currentPassword">현재 비밀번호</label>
+            <input type="password" id="currentPassword" name="currentPassword">
+          </div>
+
+          <div class="form-group">
+            <label for="newPassword">새 비밀번호</label>
+            <input type="password" id="newPassword" name="newPassword">
+            <div class="help-text">8자 이상, 대소문자 및 숫자 포함</div>
+          </div>
+
+          <div class="form-group">
+            <label for="newPasswordConfirm">새 비밀번호 확인</label>
+            <input type="password" id="newPasswordConfirm" name="newPasswordConfirm">
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button type="submit">변경사항 저장</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Numflow Blog - Powered by Numflow, EJS & Prisma</p>
+  </footer>
+</body>
+</html>

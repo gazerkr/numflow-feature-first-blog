@@ -1,0 +1,187 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// User and Authentication
+// ============================================================
+
+// User/Administrator
+model User {
+  id            String    @id @default(uuid())
+  username      String    @unique
+  email         String    @unique
+  password      String    // bcryptjs hash
+  displayName   String
+  role          String    @default("admin")  // admin, editor, viewer
+  isActive      Boolean   @default(true)
+  lastLoginAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  posts         Post[]
+
+  @@map("users")
+}
+
+// ============================================================
+// Blog Content
+// ============================================================
+
+// Blog Post
+model Post {
+  id            String    @id @default(uuid())
+  title         String
+  slug          String    @unique
+  content       String    // Markdown
+  contentHtml   String?   // Rendered HTML (cached)
+  excerpt       String?
+  coverImage    String?   // Cover image URL
+  published     Boolean   @default(false)
+  publishedAt   DateTime?
+  viewCount     Int       @default(0)
+
+  // Relations
+  authorId      String
+  author        User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  categoryId    String?
+  category      Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  tags          PostTag[]
+  comments      Comment[]
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("posts")
+  @@index([slug])
+  @@index([published, publishedAt])
+  @@index([authorId])
+  @@index([categoryId])
+}
+
+// Category
+model Category {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // 관계
+  posts       Post[]
+
+  @@map("categories")
+  @@index([slug])
+  @@index([order])
+}
+
+// Tag
+model Tag {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  slug      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // 관계
+  posts     PostTag[]
+
+  @@map("tags")
+  @@index([slug])
+}
+
+// Post-Tag Many-to-Many Relation
+model PostTag {
+  id        String   @id @default(uuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  tagId     String
+  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([postId, tagId])
+  @@map("post_tags")
+  @@index([postId])
+  @@index([tagId])
+}
+
+// Comment
+model Comment {
+  id          String   @id @default(uuid())
+  content     String
+  authorName  String
+  authorEmail String?
+  postId      String
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("comments")
+  @@index([postId])
+  @@index([createdAt])
+}
+
+// ============================================================
+// System Configuration
+// ============================================================
+
+// Blog Settings
+model Setting {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String
+  type        String   @default("string")  // string, number, boolean, json
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("settings")
+  @@index([key])
+}
+
+// ============================================================
+// Legacy Models (Maintained for Compatibility)
+// ============================================================
+
+// Numflow Features List
+model Feature {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  icon        String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("features")
+}
+
+// Tech Stack Information
+model TechStack {
+  id          String   @id @default(uuid())
+  name        String
+  category    String   // framework, template, database, etc.
+  version     String?
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("tech_stacks")
+}
