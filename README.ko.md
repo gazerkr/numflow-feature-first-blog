@@ -3,7 +3,7 @@
 > **Numflow의 Feature-First 아키텍처를 활용한 포괄적인 설치형 블로그 시스템**
 
 [![Tests](https://img.shields.io/badge/tests-188%20passing-brightgreen)](https://github.com)
-[![Numflow](https://img.shields.io/badge/Numflow-5.x-blue)](https://github.com/gazerkr/numflow)
+[![Numflow](https://img.shields.io/badge/Numflow-0.2.x-blue)](https://github.com/gazerkr/numflow)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 [English](README.md) | **한국어**
@@ -43,6 +43,7 @@ features/admin/posts/@post/steps/
 ```
 
 위와 같은 폴더 구조만 만들면:
+
 - ✅ `POST /admin/posts` 엔드포인트가 자동 등록
 - ✅ 4개의 step이 100 → 200 → 300 → 400 순서로 자동 실행
 - ✅ 각 step 간 데이터는 `ctx` 객체로 자동 공유
@@ -51,21 +52,25 @@ features/admin/posts/@post/steps/
 ### 핵심 장점
 
 #### 1️⃣ **향상된 생산성**
+
 - 폴더 생성을 통한 다수의 엔드포인트 등록
 - 라우터 설정 및 미들웨어 체이닝 보일러플레이트 감소
 - 비즈니스 로직 구현에 집중
 
 #### 2️⃣ **명확한 관심사 분리**
+
 - HTTP 계층(`req`, `res`)과 비즈니스 로직(`ctx`) 분리
 - 각 step은 단일 책임 수행
 - 테스트 및 유지보수 용이
 
 #### 3️⃣ **직관적인 구조**
+
 - 폴더 구조가 API 구조를 반영
 - 파일 번호가 실행 순서를 나타냄
 - 폴더 구성만으로 흐름 파악 가능
 
 #### 4️⃣ **유연한 설정**
+
 - 필요시 `index.js`로 명시적 설정 추가 가능
 - 컨벤션 우선, 필요시 명시적 설정
 
@@ -74,6 +79,7 @@ features/admin/posts/@post/steps/
 ### 1. 복잡한 다단계 비즈니스 로직
 
 **게시물 생성 프로세스** (`features/admin/posts/@post/`)
+
 ```
 steps/
 ├── 100-auth.js        # 인증 확인
@@ -81,6 +87,7 @@ steps/
 ├── 300-create-post.js # DB 저장 + 슬러그 생성
 └── 400-redirect.js    # 성공 페이지 이동
 ```
+
 → **4개의 독립적인 파일**이 자동으로 순차 실행되며, 설정 코드는 **단 한 줄도 없음**
 
 ### 2. RESTful API 구현
@@ -93,11 +100,13 @@ features/admin/posts/
 ├── [id]/@put/         → PUT /admin/posts/:id (수정)
 └── [id]/@delete/      → DELETE /admin/posts/:id (삭제)
 ```
+
 → **폴더 5개**로 전체 CRUD 기능 구현
 
 ### 3. 동적 라우팅
 
 `[id]`, `[slug]` 폴더명으로 동적 파라미터 자동 인식:
+
 - `features/blog/[slug]/@get/` → `GET /blog/:slug`
 - `features/api/comments/[id]/@delete/` → `DELETE /api/comments/:id`
 
@@ -122,6 +131,7 @@ export default async (ctx, req, res) => {
   res.redirect(`/admin/posts/${ctx.createdPost.id}`)
 }
 ```
+
 → HTTP 계층과 비즈니스 로직의 **명확한 분리**
 
 ### 5. 완성도 있는 구현
@@ -137,6 +147,7 @@ export default async (ctx, req, res) => {
 ## 🏗️ 주요 기능
 
 ### 📝 블로그 핵심 기능
+
 - **게시물 관리**: 마크다운 에디터, 커버 이미지, 발행/임시저장
 - **카테고리 & 태그**: 계층적 분류 및 필터링
 - **댓글 시스템**: 실시간 댓글 작성 및 관리
@@ -144,18 +155,21 @@ export default async (ctx, req, res) => {
 - **페이지네이션**: 대용량 데이터 효율 처리
 
 ### 🔐 인증 & 권한
+
 - **비밀번호 보안**: bcrypt 기반 해싱
 - **세션 관리**: Express 세션 통합
 - **역할 기반 접근**: Admin, Editor, Viewer 역할
 - **설치 프로세스**: 최초 실행 시 안내형 설정
 
 ### 🎨 관리자 패널
+
 - **대시보드**: 통계 및 최근 게시물 개요
 - **컨텐츠 관리**: 게시물, 카테고리, 태그 관리
 - **설정**: 블로그 설정 및 사용자 프로필
 - **미디어**: 이미지 업로드 처리
 
 ### ⚡ 기술 스택
+
 - **Numflow**: Express 호환 고성능 프레임워크
 - **Prisma ORM**: 타입 안전 데이터베이스
 - **SQLite**: 설정 불필요 임베디드 DB
@@ -167,31 +181,41 @@ export default async (ctx, req, res) => {
 이 프로젝트를 통해 다음을 학습할 수 있습니다:
 
 ### 1. Feature-First 기본 패턴
+
 → `features/install/` 폴더 참조
+
 - 가장 단순한 구조로 Feature-First 이해
 - `@get`, `@post` 메서드 폴더 사용법
 - 순차적 steps 실행 흐름
 
 ### 2. 다단계 비즈니스 로직
+
 → `features/admin/posts/@post/` 폴더 참조
+
 - 인증 → 검증 → 생성 → 응답의 4단계 처리
 - 각 단계의 책임 분리 방법
 - 에러 처리 및 조기 종료 패턴
 
 ### 3. RESTful API 설계
+
 → `features/admin/categories/` 폴더 참조
+
 - CRUD 전체 엔드포인트 구현
 - 동적 파라미터 처리 (`[id]` 폴더)
 - 일관된 응답 구조
 
 ### 4. 복잡한 쿼리 처리
+
 → `features/blog/search/` 폴더 참조
+
 - 검색어 파싱 및 검증
 - Prisma 복잡 쿼리 작성
 - 페이지네이션 구현
 
 ### 5. 파일 업로드
+
 → `features/api/upload/image/` 폴더 참조
+
 - 멀티파트 폼 데이터 처리
 - 파일 검증 및 저장
 - 에러 핸들링
@@ -217,6 +241,7 @@ cp .env.example .env
 ```
 
 `.env` 파일 수정:
+
 ```env
 PORT=5555
 NODE_ENV=development

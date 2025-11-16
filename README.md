@@ -3,7 +3,7 @@
 > **A comprehensive self-hosted blog system demonstrating Numflow's Feature-First architecture**
 
 [![Tests](https://img.shields.io/badge/tests-188%20passing-brightgreen)](https://github.com)
-[![Numflow](https://img.shields.io/badge/Numflow-5.x-blue)](https://github.com/gazerkr/numflow)
+[![Numflow](https://img.shields.io/badge/Numflow-0.2.x-blue)](https://github.com/gazerkr/numflow)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 **English** | [Korean](README.ko.md)
@@ -43,6 +43,7 @@ features/admin/posts/@post/steps/
 ```
 
 Just create a folder structure like this:
+
 - ✅ `POST /admin/posts` endpoint is automatically registered
 - ✅ 4 steps execute automatically in order: 100 → 200 → 300 → 400
 - ✅ Data is automatically shared between steps via the `ctx` object
@@ -51,21 +52,25 @@ Just create a folder structure like this:
 ### Core Advantages
 
 #### 1️⃣ **Improved Productivity**
+
 - Register multiple endpoints by creating folders
 - Reduce boilerplate router configuration and middleware chaining
 - Focus on business logic implementation
 
 #### 2️⃣ **Clear Separation of Concerns**
+
 - Separation between HTTP layer (`req`, `res`) and business logic (`ctx`)
 - Each step handles a single responsibility
 - Facilitates testing and maintenance
 
 #### 3️⃣ **Intuitive Structure**
+
 - Folder structure reflects API structure
 - File numbering indicates execution order
 - Understand flow from folder organization
 
 #### 4️⃣ **Flexible Configuration**
+
 - Add explicit configuration with `index.js` when needed
 - Convention over configuration, with escape hatches
 
@@ -74,6 +79,7 @@ Just create a folder structure like this:
 ### 1. Complex Multi-Step Business Logic
 
 **Post Creation Process** (`features/admin/posts/@post/`)
+
 ```
 steps/
 ├── 100-auth.js        # Authentication check
@@ -81,6 +87,7 @@ steps/
 ├── 300-create-post.js # DB save + slug generation
 └── 400-redirect.js    # Success page redirect
 ```
+
 → **4 independent files** execute automatically in sequence, with **zero configuration code**
 
 ### 2. RESTful API Implementation
@@ -93,11 +100,13 @@ features/admin/posts/
 ├── [id]/@put/         → PUT /admin/posts/:id (update)
 └── [id]/@delete/      → DELETE /admin/posts/:id (delete)
 ```
+
 → **5 folders** implement full CRUD operations
 
 ### 3. Dynamic Routing
 
 Folders named `[id]`, `[slug]` automatically recognize dynamic parameters:
+
 - `features/blog/[slug]/@get/` → `GET /blog/:slug`
 - `features/api/comments/[id]/@delete/` → `DELETE /api/comments/:id`
 
@@ -122,6 +131,7 @@ export default async (ctx, req, res) => {
   res.redirect(`/admin/posts/${ctx.createdPost.id}`)
 }
 ```
+
 → **Clear separation** of HTTP layer and business logic
 
 ### 5. Complete Implementation
@@ -137,6 +147,7 @@ export default async (ctx, req, res) => {
 ## 🏗️ Key Features
 
 ### 📝 Blog Core Features
+
 - **Post Management**: Markdown editor, cover images, publish/draft status
 - **Categories & Tags**: Hierarchical classification and filtering
 - **Comment System**: Real-time commenting and moderation
@@ -144,18 +155,21 @@ export default async (ctx, req, res) => {
 - **Pagination**: Efficient handling of large datasets
 
 ### 🔐 Authentication & Authorization
+
 - **Password Security**: bcrypt-based password hashing
 - **Session Management**: Express session integration
 - **Role-Based Access**: Admin, Editor, and Viewer roles
 - **Setup Flow**: Guided installation on first run
 
 ### 🎨 Admin Panel
+
 - **Dashboard**: Statistics and recent posts overview
 - **Content Management**: Posts, categories, and tags administration
 - **Settings**: Blog configuration and user profile
 - **Media**: Image upload handling
 
 ### ⚡ Tech Stack
+
 - **Numflow**: Express-compatible high-performance framework
 - **Prisma ORM**: Type-safe database
 - **SQLite**: Zero-configuration embedded DB
@@ -167,31 +181,41 @@ export default async (ctx, req, res) => {
 You can learn the following from this project:
 
 ### 1. Feature-First Basic Patterns
+
 → See `features/install/` folder
+
 - Understand Feature-First with the simplest structure
 - How to use `@get`, `@post` method folders
 - Sequential steps execution flow
 
 ### 2. Multi-Step Business Logic
+
 → See `features/admin/posts/@post/` folder
+
 - 4-step process: authentication → validation → creation → response
 - How to separate responsibilities at each step
 - Error handling and early termination patterns
 
 ### 3. RESTful API Design
+
 → See `features/admin/categories/` folder
+
 - Implementing complete CRUD endpoints
 - Dynamic parameter handling (`[id]` folders)
 - Consistent response structure
 
 ### 4. Complex Query Handling
+
 → See `features/blog/search/` folder
+
 - Search query parsing and validation
 - Writing complex Prisma queries
 - Pagination implementation
 
 ### 5. File Upload
+
 → See `features/api/upload/image/` folder
+
 - Multipart form data handling
 - File validation and storage
 - Error handling
@@ -217,6 +241,7 @@ cp .env.example .env
 ```
 
 Edit `.env` file:
+
 ```env
 PORT=5555
 NODE_ENV=development
