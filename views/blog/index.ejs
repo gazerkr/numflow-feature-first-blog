@@ -60,6 +60,9 @@
               class="block p-6 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-lg hover:border-indigo-300 dark:hover:border-indigo-600 transition-all no-underline text-gray-900"
             >
               <h2 class="text-2xl font-bold mb-3 dark:text-white"><%= post.title %></h2>
+              <% if (post.excerpt) { %>
+              <p class="text-gray-600 dark:text-gray-300 mb-4"><%= post.excerpt %></p>
+              <% } %>
               <div
                 class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300 mb-3"
               >

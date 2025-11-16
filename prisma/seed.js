@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import { PrismaClient } from '../generated/prisma/index.js'
 import bcrypt from 'bcryptjs'
+import { renderMarkdown } from '../lib/markdown.js'
 
 const prisma = new PrismaClient()
 
@@ -110,11 +111,7 @@ async function main() {
   console.log(`✅ ${techStacks.count} TechStacks created`)
 
   // Create Post data (including authorId)
-  const post1 = await prisma.post.create({
-    data: {
-      title: 'Numflow and Feature-First Architecture',
-      slug: 'numflow-feature-first',
-      content: `
+  const post1Content = `
 # Numflow and Feature-First Architecture
 
 Numflow is an innovative Node.js web framework that is 100% compatible with Express 5.x while providing 3x faster performance.
@@ -137,7 +134,14 @@ features/
 1. **Zero Configuration** - No config files needed
 2. **Clear Execution Order** - Order determined by filename numbers
 3. **Flexible Management** - Adjust logic by adding/removing files
-      `,
+      `
+
+  const post1 = await prisma.post.create({
+    data: {
+      title: 'Numflow and Feature-First Architecture',
+      slug: 'numflow-feature-first',
+      content: post1Content,
+      contentHtml: renderMarkdown(post1Content),
       excerpt: 'Introducing Numflow Feature-First Architecture.',
       published: true,
       authorId: admin.id,
@@ -146,11 +150,7 @@ features/
     },
   })
 
-  const post2 = await prisma.post.create({
-    data: {
-      title: 'Managing Data with Prisma and SQLite',
-      slug: 'prisma-sqlite-setup',
-      content: `
+  const post2Content = `
 # Managing Data with Prisma and SQLite
 
 This blog manages data using Prisma ORM and SQLite.
@@ -164,7 +164,14 @@ This blog manages data using Prisma ORM and SQLite.
 ## Using UUID
 
 All IDs use UUID for security and scalability.
-      `,
+      `
+
+  const post2 = await prisma.post.create({
+    data: {
+      title: 'Managing Data with Prisma and SQLite',
+      slug: 'prisma-sqlite-setup',
+      content: post2Content,
+      contentHtml: renderMarkdown(post2Content),
       excerpt: 'Data management methods using Prisma ORM and SQLite',
       published: true,
       authorId: admin.id,
