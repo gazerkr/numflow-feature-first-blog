@@ -14,6 +14,20 @@ This project is the **official showcase for the Numflow framework**. It's a full
 
 Built with attention to quality and maintainability, this project serves as both a **learning resource** and **reference implementation** for developers exploring Numflow's capabilities.
 
+## 📸 Screenshots
+
+### Installation Screen
+![Installation](screenshot/install.png)
+*Easy one-time setup process to create your administrator account*
+
+### Login Screen
+![Login](screenshot/signin.png)
+*Secure authentication with session management*
+
+### Blog Main Page
+![Blog](screenshot/blog.png)
+*Clean, modern blog interface with search functionality and dark mode support*
+
 ## 🚀 What is Numflow?
 
 **Numflow** is a Node.js web framework that maintains full compatibility with Express 5.x while delivering improved performance through optimized routing (up to 3x faster in benchmarks).

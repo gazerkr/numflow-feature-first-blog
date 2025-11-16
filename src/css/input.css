@@ -8,8 +8,28 @@
     @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-white;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold text-gray-900 dark:text-white;
+  h1 {
+    @apply text-4xl font-semibold text-gray-900 dark:text-white;
+  }
+
+  h2 {
+    @apply text-3xl font-semibold text-gray-900 dark:text-white;
+  }
+
+  h3 {
+    @apply text-2xl font-semibold text-gray-900 dark:text-white;
+  }
+
+  h4 {
+    @apply text-xl font-semibold text-gray-900 dark:text-white;
+  }
+
+  h5 {
+    @apply text-lg font-semibold text-gray-900 dark:text-white;
+  }
+
+  h6 {
+    @apply text-base font-semibold text-gray-900 dark:text-white;
   }
 
   a {
